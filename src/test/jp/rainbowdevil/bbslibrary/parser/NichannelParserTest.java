@@ -3,17 +3,19 @@ package jp.rainbowdevil.bbslibrary.parser;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.model.Board;
 import jp.rainbowdevil.bbslibrary.model.BoardGroup;
+import jp.rainbowdevil.bbslibrary.utils.IOUtils;
 
 import org.junit.Before;
 import org.junit.Test;
 public class NichannelParserTest {
-	
 	private NichannelParser parser;
 	
 	@Before
@@ -22,9 +24,11 @@ public class NichannelParserTest {
 	}
 	
 	@Test
-	public void parseBbsMenu() throws IOException{
+	public void 板一覧のパース正常系() throws IOException, BbsPerseException{
+		// Exercise
 		List<BoardGroup> boardGroups = parser.parseBbsMenu(getClass().getResourceAsStream("/bbsmenu.html"));
 		
+		// Verify
 		assertThat(boardGroups, notNullValue());
 		assertThat(boardGroups.size(), is(46));
 		
@@ -40,15 +44,38 @@ public class NichannelParserTest {
 		board = boardGroup.getBoards().get(2);
 		assertThat(board.getTitle(), is("臨時地震"));
 		assertThat(board.getUrl().toString(), is("http://hayabusa.2ch.net/eq/"));
-		
-		/*
-		for(BoardGroup boardGroup2:boardGroups){
-			System.out.println("BoardGourp title="+boardGroup2.getTitle() + " size="+boardGroup2.getBoards().size());
-			for(Board board2:boardGroup2.getBoards()){
-				System.out.println("  Board title="+board2.getTitle()+" url="+board2.getUrl());
-			}
-		}
-		*/
 	}
-
+	
+	@Test
+	public void 板一覧のパース_空文字列の入力() throws IOException{
+		// setup
+		InputStream inputStream = IOUtils.stringToInputStream("", "shift-jis");
+		
+		// Excercise
+		try{
+			List<BoardGroup> boardGroups = parser.parseBbsMenu(inputStream);
+			fail();
+		}catch(BbsPerseException e){
+			// BbsPerserExceptionが発生すること
+		}
+	}
+	
+	@Test
+	public void 板一覧のパース_不完全なデータ() throws IOException{
+		// setup
+		InputStream inputStream = IOUtils.stringToInputStream(
+				"<A HREF=http://www.2ch.net/ TARGET=\"_top\">2chの入り口</A><br>\n" +
+				"<A HREF=http://info.2ch.net/guide/>2ch総合案内</A>\n" +
+				"\n" +
+				"<BR><BR><B>地震</B><BR>\n" +
+				"<A HREF=http://headline.2ch.net/bbynamazu/>地震", "shift-jis");
+		
+		// Excercise
+		try{
+			List<BoardGroup> boardGroups = parser.parseBbsMenu(inputStream);
+			fail();
+		}catch(BbsPerseException e){
+			// BbsPerserExceptionが発生すること
+		}
+	}
 }

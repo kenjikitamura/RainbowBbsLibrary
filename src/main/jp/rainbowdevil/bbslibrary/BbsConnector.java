@@ -12,6 +12,7 @@ import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.net.IDownloader;
 import jp.rainbowdevil.bbslibrary.net.WebDownloader;
+import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
 import jp.rainbowdevil.bbslibrary.parser.NichannelParser;
 
 public class BbsConnector {
@@ -26,7 +27,7 @@ public class BbsConnector {
 		connectorConfig = new ConnectorConfig();
 	}
 	
-	public List<BoardGroup> getBoardGroup() throws IOException{
+	public List<BoardGroup> getBoardGroup() throws IOException, BbsPerseException{
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(bbs.getUrl()));
 		NichannelParser parser = new NichannelParser();
@@ -34,7 +35,7 @@ public class BbsConnector {
 		return boardGroups;
 	}
 	
-	public List<MessageThread> getMessageThreadList(Board board) throws IOException{
+	public List<MessageThread> getMessageThreadList(Board board) throws IOException, BbsPerseException{
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(board.getUrl()+"subject.txt"));
 		NichannelParser parser = new NichannelParser();
@@ -42,7 +43,7 @@ public class BbsConnector {
 		return messageThreads;
 	}
 	
-	public List<Message> getMessageList(MessageThread messageThread,Board board) throws IOException{
+	public List<Message> getMessageList(MessageThread messageThread,Board board) throws IOException, BbsPerseException{
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(board.getUrl()+"dat/"+messageThread.getFilename()));
 		NichannelParser parser = new NichannelParser();

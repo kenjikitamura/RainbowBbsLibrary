@@ -9,6 +9,7 @@ import jp.rainbowdevil.bbslibrary.model.Board;
 import jp.rainbowdevil.bbslibrary.model.BoardGroup;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
+import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
 
 
 /**
@@ -25,10 +26,13 @@ public class Test {
 		} catch (IOException e) {
 			System.err.println("エラー発生");
 			e.printStackTrace();
+		} catch (BbsPerseException e) {
+			System.out.println("パース失敗");
+			e.printStackTrace();
 		}
 	}
 	
-	private void start() throws IOException{
+	private void start() throws IOException, BbsPerseException{
 		Bbs bbs = new Bbs();
 		bbs.setUrl("http://menu.2ch.net/bbsmenu.html");
 		BbsManager bbsManager = new BbsManager();

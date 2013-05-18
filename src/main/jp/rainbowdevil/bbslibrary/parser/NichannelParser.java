@@ -25,13 +25,12 @@ public class NichannelParser implements IBbsParser{
 
 
 	@Override
-	public List<BoardGroup> parseBbsMenu(InputStream inputStream) throws IOException {
+	public List<BoardGroup> parseBbsMenu(InputStream inputStream) throws IOException, BbsPerseException {
 		String text = IOUtils.toString(inputStream, CHARACTER_CODE);
 		String[] lines = text.split("\n");
 		List<BoardGroup> boardGroups = new ArrayList<BoardGroup>();
 		BoardGroup boardGroup = null;
 		for(String line:lines){
-			//System.out.println("line="+line);
 			if (line.indexOf(PREFIX_BOARDGROUP) == 0){
 				String title = line.substring(PREFIX_BOARDGROUP.length());
 				title = title.replaceAll("</B><BR>", "");
@@ -40,25 +39,35 @@ public class NichannelParser implements IBbsParser{
 				boardGroups.add(boardGroup);
 			}
 			if (line.indexOf(PREFIX_BOARD) == 0 && boardGroup != null){
-				String data = line.substring(PREFIX_BOARD.length());
-				Board board = new Board();
-				int index = data.indexOf(">");				
-				String url = data.substring(0, index);
-				url = url.replaceAll(" TARGET=_blank", "");
-				String title = data.substring(index+1,data.indexOf("</A>"));
-				board.setTitle(title);
-				board.setUrl(url);
-				board.setParentBbs(null);
-				board.setParentBoardGroup(boardGroup);
-				boardGroup.getBoards().add(board);
+				try{
+					String data = line.substring(PREFIX_BOARD.length());
+					Board board = new Board();
+					int index = data.indexOf(">");				
+					String url = data.substring(0, index);
+					url = url.replaceAll(" TARGET=_blank", "");
+					String title = data.substring(index+1,data.indexOf("</A>"));
+					board.setTitle(title);
+					board.setUrl(url);
+					board.setParentBbs(null);
+					board.setParentBoardGroup(boardGroup);
+					boardGroup.getBoards().add(board);
+				}catch(IndexOutOfBoundsException e){
+					throw new BbsPerseException("板のパースに失敗 line="+line, e);
+				}
 			}
+				
 		}
+		
+		if (boardGroups.size() == 0){
+			throw new BbsPerseException("パースした結果、板が見つかりませんでした。");
+		}
+			
 		return boardGroups;
 	}
 
 	
 	@Override
-	public List<MessageThread> parseMessageThreadList(InputStream inputStream) throws IOException {
+	public List<MessageThread> parseMessageThreadList(InputStream inputStream) throws IOException , BbsPerseException{
 		String text = IOUtils.toString(inputStream, CHARACTER_CODE);
 		String[] lines = text.split("\n");
 		List<MessageThread> messageThreads = new ArrayList<MessageThread>();
@@ -83,7 +92,7 @@ public class NichannelParser implements IBbsParser{
 	}
 
 	@Override
-	public List<Message> parseMessageList(InputStream inputStream) throws IOException {
+	public List<Message> parseMessageList(InputStream inputStream) throws IOException , BbsPerseException{
 		String text = IOUtils.toString(inputStream, CHARACTER_CODE);
 		String[] lines = text.split("\n");
 		List<Message> messages = new ArrayList<Message>();

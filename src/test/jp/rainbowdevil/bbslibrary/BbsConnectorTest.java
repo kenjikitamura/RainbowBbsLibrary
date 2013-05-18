@@ -14,6 +14,7 @@ import jp.rainbowdevil.bbslibrary.model.BoardGroup;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.net.TestDownloader;
+import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class BbsConnectorTest {
 	}
 	
 	@Test
-	public void getBoardList() throws IOException{
+	public void getBoardList() throws IOException, BbsPerseException{
 		downloader.inputStream = getClass().getResourceAsStream("/bbsmenu.html");
 		List<BoardGroup> boardGroups = bbsConnector.getBoardGroup();
 		assertThat(boardGroups, notNullValue());
@@ -43,7 +44,7 @@ public class BbsConnectorTest {
 	}
 	
 	@Test
-	public void getMessageThread() throws IOException{
+	public void getMessageThread() throws IOException, BbsPerseException{
 		Board board = new Board();
 		board.setTitle("テスト板");
 		board.setUrl("http://hoge");
@@ -70,7 +71,7 @@ public class BbsConnectorTest {
 	}
 	
 	@Test
-	public void getMessageList() throws IOException{
+	public void getMessageList() throws IOException, BbsPerseException{
 		MessageThread messageThread = new MessageThread();
 		messageThread.setCreatedDate(new Date());
 		messageThread.setFilename("test.dat");

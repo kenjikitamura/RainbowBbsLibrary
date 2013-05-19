@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.model.Board;
-import jp.rainbowdevil.bbslibrary.model.BoardGroup;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.utils.IOUtils;
@@ -33,16 +32,16 @@ public class NichannelParser implements IBbsParser{
 	 * @param inputStream
 	 */
 	@Override 
-	public List<BoardGroup> parseBbsMenu(InputStream inputStream) throws IOException, BbsPerseException {
+	public List<Board> parseBbsMenu(InputStream inputStream) throws IOException, BbsPerseException {
 		String text = IOUtils.toString(inputStream, CHARACTER_CODE);
 		String[] lines = text.split("\n");
-		List<BoardGroup> boardGroups = new ArrayList<BoardGroup>();
-		BoardGroup boardGroup = null;
+		List<Board> boardGroups = new ArrayList<Board>();
+		Board boardGroup = null;
 		for(String line:lines){
 			if (line.indexOf(PREFIX_BOARDGROUP) == 0){
 				String title = line.substring(PREFIX_BOARDGROUP.length());
 				title = title.replaceAll("</B><BR>", "");
-				boardGroup = new BoardGroup();
+				boardGroup = new Board();
 				boardGroup.setTitle(title);
 				boardGroups.add(boardGroup);
 			}
@@ -57,8 +56,8 @@ public class NichannelParser implements IBbsParser{
 					board.setTitle(title);
 					board.setUrl(url);
 					board.setParentBbs(null);
-					board.setParentBoardGroup(boardGroup);
-					boardGroup.getBoards().add(board);
+					board.setParentBoard(boardGroup);
+					boardGroup.getChildren().add(board);
 				}catch(IndexOutOfBoundsException e){
 					throw new BbsPerseException("板のパースに失敗 line="+line, e);
 				}

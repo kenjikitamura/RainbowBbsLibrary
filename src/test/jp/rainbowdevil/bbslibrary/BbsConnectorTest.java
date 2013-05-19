@@ -10,7 +10,6 @@ import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.model.Bbs;
 import jp.rainbowdevil.bbslibrary.model.Board;
-import jp.rainbowdevil.bbslibrary.model.BoardGroup;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.net.TestDownloader;
@@ -38,7 +37,7 @@ public class BbsConnectorTest {
 	@Test
 	public void getBoardList() throws IOException, BbsPerseException{
 		downloader.inputStream = getClass().getResourceAsStream("/bbsmenu.html");
-		List<BoardGroup> boardGroups = bbsConnector.getBoardGroup();
+		List<Board> boardGroups = bbsConnector.getBoardGroup();
 		assertThat(boardGroups, notNullValue());
 		assertThat(boardGroups.size(), is(46));
 	}

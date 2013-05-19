@@ -1,12 +1,26 @@
 package jp.rainbowdevil.bbslibrary.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Board {
 	private String title;
 	private String url;
 	private Bbs parentBbs;
-	private BoardGroup parentBoardGroup; 
+	private List<Board> children;
+	private Board parentBoard;
 	
+	public Board(){
+		children = new ArrayList<Board>();
+	}
+	
+	public List<Board> getChildren() {
+		return children;
+	}
+	public void setChildren(List<Board> children) {
+		this.children = children;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -25,10 +39,18 @@ public class Board {
 	public void setParentBbs(Bbs parentBbs) {
 		this.parentBbs = parentBbs;
 	}
-	public BoardGroup getParentBoardGroup() {
-		return parentBoardGroup;
+	public Board getParentBoard() {
+		return parentBoard;
 	}
-	public void setParentBoardGroup(BoardGroup parentBoardGroup) {
-		this.parentBoardGroup = parentBoardGroup;
+
+	public void setParentBoard(Board parentBoard) {
+		this.parentBoard = parentBoard;
+	}
+	public boolean hasChildren(){
+		if (children == null || children.size() == 0){
+			return false;
+		}else{
+			return true;
+		}
 	}
 }

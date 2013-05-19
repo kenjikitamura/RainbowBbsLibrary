@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.model.Board;
-import jp.rainbowdevil.bbslibrary.model.BoardGroup;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.utils.IOUtils;
@@ -28,22 +27,22 @@ public class NichannelParserTest {
 	@Test
 	public void 板一覧のパース正常系() throws IOException, BbsPerseException{
 		// Exercise
-		List<BoardGroup> boardGroups = parser.parseBbsMenu(getClass().getResourceAsStream("/bbsmenu.html"));
+		List<Board> boardGroups = parser.parseBbsMenu(getClass().getResourceAsStream("/bbsmenu.html"));
 		
 		// Verify
 		assertThat(boardGroups, notNullValue());
 		assertThat(boardGroups.size(), is(46));
 		
-		BoardGroup boardGroup = boardGroups.get(0);
+		Board boardGroup = boardGroups.get(0);
 		assertThat(boardGroup, notNullValue());
 		assertThat(boardGroup.getTitle(), is("地震"));
-		assertThat(boardGroup.getBoards().size(), is(5));
+		assertThat(boardGroup.getChildren().size(), is(5));
 		
-		Board board = boardGroup.getBoards().get(0);
+		Board board = boardGroup.getChildren().get(0);
 		assertThat(board.getTitle(), is("地震headline"));
 		assertThat(board.getUrl().toString(), is("http://headline.2ch.net/bbynamazu/"));
 		
-		board = boardGroup.getBoards().get(2);
+		board = boardGroup.getChildren().get(2);
 		assertThat(board.getTitle(), is("臨時地震"));
 		assertThat(board.getUrl().toString(), is("http://hayabusa.2ch.net/eq/"));
 	}
@@ -55,7 +54,7 @@ public class NichannelParserTest {
 		
 		// Exercise
 		try{
-			List<BoardGroup> boardGroups = parser.parseBbsMenu(inputStream);
+			List<Board> boardGroups = parser.parseBbsMenu(inputStream);
 			fail();
 		}catch(BbsPerseException e){
 			// BbsPerserExceptionが発生すること
@@ -72,7 +71,7 @@ public class NichannelParserTest {
 				"<BR><BR><B>地震</B>\n", "shift-jis");
 		
 		// Exercise
-		List<BoardGroup> boardGroups = parser.parseBbsMenu(inputStream);
+		List<Board> boardGroups = parser.parseBbsMenu(inputStream);
 		
 		// Verify
 		assertThat(boardGroups.size(), is(1));
@@ -91,7 +90,7 @@ public class NichannelParserTest {
 		
 		// Exercise
 		try{
-			List<BoardGroup> boardGroups = parser.parseBbsMenu(inputStream);
+			List<Board> boardGroups = parser.parseBbsMenu(inputStream);
 			fail();
 		}catch(BbsPerseException e){
 			// BbsPerserExceptionが発生すること

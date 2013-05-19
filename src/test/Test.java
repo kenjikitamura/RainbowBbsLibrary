@@ -6,7 +6,6 @@ import jp.rainbowdevil.bbslibrary.BbsManager;
 import jp.rainbowdevil.bbslibrary.ConnectorConfig;
 import jp.rainbowdevil.bbslibrary.model.Bbs;
 import jp.rainbowdevil.bbslibrary.model.Board;
-import jp.rainbowdevil.bbslibrary.model.BoardGroup;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
@@ -41,15 +40,15 @@ public class Test {
 		config.setProxyPort(8080);
 		BbsConnector connector = bbsManager.createBbsConnector(bbs);
 		connector.setConnectorConfig(config);
-		List<BoardGroup> boardGroups = connector.getBoardGroup();
+		List<Board> boardGroups = connector.getBoardGroup();
 		if (boardGroups.size() == 0){
 			System.out.println("板一覧所得失敗");
 			return;
 		}
 		System.out.println("板一覧取得成功 size="+boardGroups.size() );
 		
-		BoardGroup boardGroup = boardGroups.get(3);
-		Board board = boardGroup.getBoards().get(0);
+		Board boardGroup = boardGroups.get(3);
+		Board board = boardGroup.getChildren().get(0);
 		
 		System.out.println("スレッド一覧取得開始 板="+board.getTitle()+" url="+board.getUrl());
 		

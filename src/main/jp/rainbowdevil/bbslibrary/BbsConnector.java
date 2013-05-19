@@ -7,7 +7,6 @@ import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.model.Bbs;
 import jp.rainbowdevil.bbslibrary.model.Board;
-import jp.rainbowdevil.bbslibrary.model.BoardGroup;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.net.IDownloader;
@@ -27,11 +26,11 @@ public class BbsConnector {
 		connectorConfig = new ConnectorConfig();
 	}
 	
-	public List<BoardGroup> getBoardGroup() throws IOException, BbsPerseException{
+	public List<Board> getBoardGroup() throws IOException, BbsPerseException{
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(bbs.getUrl()));
 		NichannelParser parser = new NichannelParser();
-		List<BoardGroup> boardGroups = parser.parseBbsMenu(inputStream);		
+		List<Board> boardGroups = parser.parseBbsMenu(inputStream);		
 		return boardGroups;
 	}
 	

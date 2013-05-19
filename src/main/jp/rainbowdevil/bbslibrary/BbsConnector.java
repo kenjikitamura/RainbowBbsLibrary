@@ -39,6 +39,9 @@ public class BbsConnector {
 		InputStream inputStream = downloader.getContents(new URL(board.getUrl()+"subject.txt"));
 		NichannelParser parser = new NichannelParser();
 		List<MessageThread> messageThreads = parser.parseMessageThreadList(inputStream);
+		for(MessageThread messageThread:messageThreads){
+			messageThread.setParentBoard(board);
+		}
 		return messageThreads;
 	}
 	

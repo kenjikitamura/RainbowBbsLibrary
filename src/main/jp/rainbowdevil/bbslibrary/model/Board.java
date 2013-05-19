@@ -15,6 +15,11 @@ public class Board {
 		children = new ArrayList<Board>();
 	}
 	
+	@Override
+	public String toString() {
+		return title;
+	}
+	
 	public List<Board> getChildren() {
 		return children;
 	}

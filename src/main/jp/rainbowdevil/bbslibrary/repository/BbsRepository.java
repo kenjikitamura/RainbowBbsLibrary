@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import jp.rainbowdevil.bbslibrary.model.Bbs;
+import jp.rainbowdevil.bbslibrary.model.Board;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 
 /**
@@ -86,13 +87,63 @@ public class BbsRepository {
 		return path;
 	}
 	
+	String getMessageThreadListFilePath(Board board){
+		Bbs bbs = board.getParentBbs();
+		if (bbs == null){
+			throw new NullPointerException("スレ内容保存時にBbsがnull");
+		}
+		String path = getBbsRepositoryPath() + bbs.getId()+ File.separator + board.getId() + File.separator +"subject.txt";
+		return path;
+	}
+	
+	public void writeMessageThreadList(Board board, byte[] data) throws IOException{
+		String path = getMessageThreadListFilePath(board);
+		write(new File(path), data);
+	}
+	
 	/**
-	 * スレッドを保存する。
+	 * DATファイルを保存する。
 	 * 
 	 * @param messageThread
+	 * @throws IOException 
 	 */
-	public void writeMessageThread(MessageThread messageThread, byte[] data){
+	public void writeMessageThread(MessageThread messageThread, byte[] data) throws IOException{
+		String path = getMessageThreadFilePath(messageThread);
+		write(new File(path), data);
+	}
+	
+	public InputStream loadMessageThreadList(Board board) throws FileNotFoundException{
+		String path = getMessageThreadListFilePath(board);
+		FileInputStream fileInputStream = new FileInputStream(new File(path));
+		return fileInputStream;
+	}
+
+	/**
+	 * 保存したDATファイルのInputStreamを取得する。
+	 * @param messageThread
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public InputStream loadMessageThread(MessageThread messageThread) throws FileNotFoundException{
+		String path = getMessageThreadFilePath(messageThread);
+		FileInputStream fileInputStream = new FileInputStream(new File(path));
+		return fileInputStream;
+	}
+	
+	String getMessageThreadFilePath(MessageThread messageThread){
+		Board board = messageThread.getParentBoard();
+		if (board == null){
+			throw new NullPointerException("DATファイルパス生成時にBoardがnull");
+		}
 		
+		Bbs bbs = messageThread.getParentBoard().getParentBbs();
+		
+		if (bbs == null){
+			throw new NullPointerException("DATファイルパス生成時にBbsがnull");
+		}
+
+		String path = getBbsRepositoryPath() + bbs.getId()+ File.separator + board.getId()+ File.separator+messageThread.getFilename();
+		return path;
 	}
 
 	public String getBbsRepositoryPath() {

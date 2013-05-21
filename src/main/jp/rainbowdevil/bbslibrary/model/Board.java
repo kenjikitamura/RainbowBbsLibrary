@@ -7,6 +7,7 @@ import java.util.List;
 public class Board {
 	private String title;
 	private String url;
+	private String id;
 	private Bbs parentBbs;
 	private List<Board> children;
 	private Board parentBoard;
@@ -57,5 +58,13 @@ public class Board {
 		}else{
 			return true;
 		}
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

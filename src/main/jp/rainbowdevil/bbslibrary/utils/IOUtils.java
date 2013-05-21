@@ -2,10 +2,12 @@ package jp.rainbowdevil.bbslibrary.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -48,6 +50,20 @@ public class IOUtils {
 	 */
 	static public String readFile(File file, String characterCode) throws IOException{		
 		return toString(new FileInputStream(file), characterCode);
+	}
+	
+	/**
+	 * FileにStringを書き出す。
+	 * 
+	 * @param file
+	 * @param text
+	 * @param characterCode
+	 * @throws IOException
+	 */
+	public static void writeFile(File file, String text, String characterCode) throws IOException{
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),characterCode));
+		writer.write(text);
+		writer.close();
 	}
 	
 	/**

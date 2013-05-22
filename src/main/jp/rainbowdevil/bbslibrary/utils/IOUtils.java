@@ -29,7 +29,7 @@ public class IOUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	static public String toString(InputStream inputStream, String characterCode) throws IOException{
+	public static String toString(InputStream inputStream, String characterCode) throws IOException{
 		StringBuilder sb = new StringBuilder();
 		BufferedReader br = new BufferedReader(new InputStreamReader(new BufferedInputStream(inputStream),characterCode));
 		String line = null;
@@ -41,6 +41,24 @@ public class IOUtils {
 	}
 	
 	/**
+	 * InputStreamをbyte配列に変換する。
+	 * 
+	 * @param inputStream
+	 * @return
+	 * @throws IOException
+	 */
+	public static byte[] toByteArray(InputStream inputStream) throws IOException{
+		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+		byte[] buffer = new byte[10240];// 10kごと読み込み
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		int len = 0;
+		while((len = bufferedInputStream.read(buffer)) != -1){
+			byteArrayOutputStream.write(buffer,0,len);
+		}
+		return byteArrayOutputStream.toByteArray();
+	}
+	
+	/**
 	 * Fileを読み込み、Stringを返す。
 	 * 
 	 * @param file
@@ -48,7 +66,7 @@ public class IOUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	static public String readFile(File file, String characterCode) throws IOException{		
+	public static String readFile(File file, String characterCode) throws IOException{		
 		return toString(new FileInputStream(file), characterCode);
 	}
 	
@@ -74,7 +92,7 @@ public class IOUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	static public String readResource(String filename, String characterCode) throws IOException{
+	public static String readResource(String filename, String characterCode) throws IOException{
 		return toString(IOUtils.class.getResourceAsStream(filename), characterCode);
 	}
 	

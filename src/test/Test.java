@@ -2,13 +2,13 @@ import java.io.IOException;
 import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.BbsConnector;
-import jp.rainbowdevil.bbslibrary.BbsManager;
 import jp.rainbowdevil.bbslibrary.ConnectorConfig;
 import jp.rainbowdevil.bbslibrary.model.Bbs;
 import jp.rainbowdevil.bbslibrary.model.Board;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
+import jp.rainbowdevil.bbslibrary.parser.NichannelParser;
 
 
 /**
@@ -34,13 +34,14 @@ public class Test {
 	private void start() throws IOException, BbsPerseException{
 		Bbs bbs = new Bbs();
 		bbs.setUrl("http://menu.2ch.net/bbsmenu.html");
-		BbsManager bbsManager = new BbsManager();
+		//BbsManager bbsManager = new BbsManager();
+		NichannelParser parser = new NichannelParser();
 		ConnectorConfig config = new ConnectorConfig();
 		config.setProxyServer(null);
 		config.setProxyPort(8080);
-		BbsConnector connector = bbsManager.createBbsConnector(bbs);
+		BbsConnector connector = new BbsConnector(bbs);;
 		connector.setConnectorConfig(config);
-		List<Board> boardGroups = connector.getBoardGroup();
+		List<Board> boardGroups = parser.parseBbsMenu(connector.getBoardGroup());
 		if (boardGroups.size() == 0){
 			System.out.println("板一覧所得失敗");
 			return;

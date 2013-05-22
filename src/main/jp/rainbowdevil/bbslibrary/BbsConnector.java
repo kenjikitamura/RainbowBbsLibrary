@@ -26,14 +26,13 @@ public class BbsConnector {
 		connectorConfig = new ConnectorConfig();
 	}
 	
-	public List<Board> getBoardGroup() throws IOException, BbsPerseException{
+	public InputStream getBoardGroup() throws IOException, BbsPerseException{
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(bbs.getUrl()));
-		NichannelParser parser = new NichannelParser();
-		List<Board> boardGroups = parser.parseBbsMenu(inputStream);		
-		return boardGroups;
+		return inputStream;
 	}
 	
+
 	public List<MessageThread> getMessageThreadList(Board board) throws IOException, BbsPerseException{
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(board.getUrl()+"subject.txt"));

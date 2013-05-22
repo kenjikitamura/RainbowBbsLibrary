@@ -14,6 +14,7 @@ import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.net.TestDownloader;
 import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
+import jp.rainbowdevil.bbslibrary.parser.NichannelParser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,7 @@ public class BbsConnectorTest {
 	private Bbs bbs;
 	private BbsConnector bbsConnector;
 	private TestDownloader downloader;
+	private NichannelParser parser;
 	
 	@Before
 	public void setup() throws IOException{
@@ -32,12 +34,13 @@ public class BbsConnectorTest {
 		bbsConnector = new BbsConnector(bbs);
 		downloader = new TestDownloader();
 		bbsConnector.setDownloader(downloader);
+		parser = new NichannelParser();
 	}
 	
 	@Test
 	public void getBoardList() throws IOException, BbsPerseException{
 		downloader.inputStream = getClass().getResourceAsStream("/bbsmenu.html");
-		List<Board> boardGroups = bbsConnector.getBoardGroup();
+		List<Board> boardGroups = parser.parseBbsMenu(bbsConnector.getBoardGroup());
 		assertThat(boardGroups, notNullValue());
 		assertThat(boardGroups.size(), is(46));
 	}

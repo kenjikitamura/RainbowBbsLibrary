@@ -49,7 +49,10 @@ public class BbsConnector {
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(board.getUrl()+"dat/"+messageThread.getFilename()));
 		NichannelParser parser = new NichannelParser();
-		List<Message> messages = parser.parseMessageList(inputStream);				
+		List<Message> messages = parser.parseMessageList(inputStream);	
+		for(Message message:messages){
+			message.setParentMessageThread(messageThread);
+		}
 		return messages;
 	}
 	

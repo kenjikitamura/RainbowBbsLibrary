@@ -115,6 +115,21 @@ public class BbsRepositoryTest {
 	}
 	
 	@Test
+	public void スレッド一覧ファイル保存先パスの確認_nullpo(){
+		// Setup
+		Board board = new Board();
+		board.setId("board");
+		
+		// Exercise
+		try{
+			String actual = repository.getMessageThreadListFilePath(board);
+			fail();
+		}catch(NullPointerException e){
+			// 親BBSを設定しないBoardのgetMessageThreadListFilePathを実行するとNullPointerExceptionが発生する。 
+		}
+	}
+	
+	@Test
 	public void スレッド一覧ファイルの保存テスト() throws IOException{
 		// Setup
 		Bbs bbs = new Bbs();
@@ -169,6 +184,7 @@ public class BbsRepositoryTest {
 		file.delete();
 	}
 	
+	@Test
 	public void DATファイル保存テスト() throws IOException{
 		// Setup
 		Bbs bbs = new Bbs();

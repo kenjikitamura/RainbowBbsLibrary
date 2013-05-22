@@ -145,9 +145,9 @@ public class NichannelParser implements IBbsParser{
 			// ID取得
 			if (idIndex != -1){
 				if (beIndex != -1){
-					userHash = dateString.substring(idIndex + 3,beIndex);
+					userHash = dateString.substring(idIndex + 3,beIndex).trim();
 				}else{
-					userHash = dateString.substring(idIndex + 3);
+					userHash = dateString.substring(idIndex + 3).trim();
 				}
 			}
 			Message message = new Message();

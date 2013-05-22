@@ -1,5 +1,6 @@
 package jp.rainbowdevil.bbslibrary.parser;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -36,10 +37,12 @@ public class NichannelParserTest {
 		Board boardGroup = boardGroups.get(0);
 		assertThat(boardGroup, notNullValue());
 		assertThat(boardGroup.getTitle(), is("地震"));
+		assertThat(boardGroup.hasChildren(),is(true));
 		assertThat(boardGroup.getChildren().size(), is(5));
 		
 		Board board = boardGroup.getChildren().get(0);
 		assertThat(board.getTitle(), is("地震headline"));
+		assertThat(board.hasChildren(),is(false));
 		assertThat(board.getUrl().toString(), is("http://headline.2ch.net/bbynamazu/"));
 		
 		board = boardGroup.getChildren().get(2);
@@ -266,6 +269,38 @@ public class NichannelParserTest {
 		assertThat(message.getSubmittedDateString(), is("2012/03/05(月) 00:04:17.23"));
 		assertThat(message.getUserHash(), is("7yWZ2l3x0"));
 		assertThat(message.getBody(), is(" ありゃりゃ "));
+	}
+	
+	@Test
+	public void レス一覧のパース_正常系3_ID有る無しパターン() throws IOException, BbsPerseException {
+		// Setup
+		InputStream inputStream = IOUtils.stringToInputStream(
+				"モルモットさん（金）</b>(地震なし)<b><>sage<>2012/03/05(月) 00:04:17.23<> ありゃりゃ <>\n" +
+				"モルモットさん（金）</b>(地震なし)<b><><>2012/03/05(月) 00:07:08.50 BE:999999999-DIA(20000)<> ＜●＞＜●＞ <>\n" +
+				"モルモットさん（金）</b>(地震なし)<b><><>2012/03/05(月) 00:08:09.54 ID:OU5SkL5g0 BE:999999999-DIA(20000)<> 924にするぞー <>\n"
+				, "shift-jis");
+
+		// Exercise
+		List<Message> messages = parser.parseMessageList(inputStream);
+
+		// Verify
+		assertThat(messages, notNullValue());
+		assertThat(messages.size(), is(3));
+
+		Message message;
+		message = messages.get(0);
+		assertThat(message.getUserName(), is("モルモットさん（金）</b>(地震なし)<b>"));
+		assertThat(message.getEmail(), is("sage"));
+		assertThat(message.getSubmittedDateString(), is("2012/03/05(月) 00:04:17.23"));
+		assertThat(message.getUserHash(), is(nullValue()));
+		assertThat(message.getBody(), is(" ありゃりゃ "));
+		
+		message = messages.get(2);
+		assertThat(message.getUserName(), is("モルモットさん（金）</b>(地震なし)<b>"));
+		assertThat(message.getEmail(), is(""));
+		assertThat(message.getSubmittedDateString(), is("2012/03/05(月) 00:08:09.54"));
+		assertThat(message.getUserHash(), is("OU5SkL5g0"));
+		assertThat(message.getBody(), is(" 924にするぞー "));
 	}
 	
 	@Test

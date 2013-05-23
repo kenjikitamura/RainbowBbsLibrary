@@ -2,12 +2,14 @@ package jp.rainbowdevil.bbslibrary.net;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Proxy;
 import java.net.URL;
 
 public class TestDownloader implements IDownloader{
 	
 	//public String contentsString = "";
 	//public byte[] bytes;
+
 	public InputStream inputStream;
 	
 	@Override
@@ -16,10 +18,11 @@ public class TestDownloader implements IDownloader{
 	}
 
 	@Override
-	public void setProxyPort(int proxyPort) {
+	public void setProxy(Proxy proxy) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	@Override
-	public void setProxyServer(String proxyServer) {
-	}
+
 }
+

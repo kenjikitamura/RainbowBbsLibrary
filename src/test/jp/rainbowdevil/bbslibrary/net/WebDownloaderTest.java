@@ -15,8 +15,6 @@ public class WebDownloaderTest {
 	//@Test
 	public void test() throws MalformedURLException, IOException{
 		WebDownloader webDownloader = new WebDownloader();
-		webDownloader.setProxyServer(null);
-		webDownloader.setProxyPort(8080);
 		InputStream is = webDownloader.getContents(new URL("http://menu.2ch.net/bbsmenu.html"));
 		
 		StringBuilder sb = new StringBuilder();

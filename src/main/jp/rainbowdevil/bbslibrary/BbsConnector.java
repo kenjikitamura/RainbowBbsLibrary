@@ -2,6 +2,7 @@ package jp.rainbowdevil.bbslibrary;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.List;
 
@@ -18,12 +19,13 @@ public class BbsConnector {
 	
 	private Bbs bbs;
 	private IDownloader downloader;
-	private ConnectorConfig connectorConfig;
+	private Proxy proxy;
+	//private ConnectorConfig connectorConfig;
 	
 	public BbsConnector(Bbs bbs){
 		this.bbs = bbs;
 		downloader = new WebDownloader();
-		connectorConfig = new ConnectorConfig();
+		//connectorConfig = new ConnectorConfig();
 	}
 	
 	public InputStream getBoardGroup() throws IOException, BbsPerseException{
@@ -56,8 +58,7 @@ public class BbsConnector {
 	}
 	
 	private void setupDownloader(){
-		downloader.setProxyServer(connectorConfig.getProxyServer());
-		downloader.setProxyPort(connectorConfig.getProxyPort());
+		downloader.setProxy(proxy);
 	}
 
 	IDownloader getDownloader() {
@@ -67,7 +68,7 @@ public class BbsConnector {
 	void setDownloader(IDownloader downloader) {
 		this.downloader = downloader;
 	}
-
+/*
 	public ConnectorConfig getConnectorConfig() {
 		return connectorConfig;
 	}
@@ -75,5 +76,13 @@ public class BbsConnector {
 	public void setConnectorConfig(ConnectorConfig connectorConfig) {
 		this.connectorConfig = connectorConfig;
 	}
+*/
 
+	public Proxy getProxy() {
+		return proxy;
+	}
+
+	public void setProxy(Proxy proxy) {
+		this.proxy = proxy;
+	}
 }

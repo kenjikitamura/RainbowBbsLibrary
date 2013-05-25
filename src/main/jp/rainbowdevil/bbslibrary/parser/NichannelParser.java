@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jp.rainbowdevil.bbslibrary.model.Bbs;
 import jp.rainbowdevil.bbslibrary.model.Board;
 import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
@@ -32,7 +33,7 @@ public class NichannelParser implements IBbsParser{
 	 * @param inputStream
 	 */
 	@Override 
-	public List<Board> parseBbsMenu(InputStream inputStream) throws IOException, BbsPerseException {
+	public List<Board> parseBbsMenu(InputStream inputStream, Bbs bbs) throws IOException, BbsPerseException {
 		String text = IOUtils.toString(inputStream, CHARACTER_CODE);
 		String[] lines = text.split("\n");
 		List<Board> boardGroups = new ArrayList<Board>();
@@ -44,6 +45,7 @@ public class NichannelParser implements IBbsParser{
 				boardGroup = new Board();
 				boardGroup.setTitle(title);
 				boardGroups.add(boardGroup);
+				boardGroup.setParentBbs(bbs);
 			}
 			if (line.indexOf(PREFIX_BOARD) == 0 && boardGroup != null){
 				try{
@@ -55,8 +57,8 @@ public class NichannelParser implements IBbsParser{
 					String title = data.substring(index+1,data.indexOf("</A>"));
 					board.setTitle(title);
 					board.setUrl(url);
-					board.setParentBbs(null);
 					board.setParentBoard(boardGroup);
+					board.setParentBbs(bbs);
 					boardGroup.getChildren().add(board);
 				}catch(IndexOutOfBoundsException e){
 					throw new BbsPerseException("板のパースに失敗 line="+line, e);

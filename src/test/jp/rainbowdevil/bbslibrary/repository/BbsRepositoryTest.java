@@ -86,7 +86,7 @@ public class BbsRepositoryTest {
 		// Exercise
 		repository.init();
 		InputStream inputStream = repository.loadBoardList(bbs);
-		List<Board> boards = nichannelParser.parseBbsMenu(inputStream);
+		List<Board> boards = nichannelParser.parseBbsMenu(inputStream, bbs);
 				
 		// Verify
 		assertThat(boards, is(notNullValue()));

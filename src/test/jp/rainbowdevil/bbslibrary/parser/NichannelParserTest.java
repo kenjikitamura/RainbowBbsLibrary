@@ -28,7 +28,7 @@ public class NichannelParserTest {
 	@Test
 	public void 板一覧のパース正常系() throws IOException, BbsPerseException{
 		// Exercise
-		List<Board> boardGroups = parser.parseBbsMenu(getClass().getResourceAsStream("/bbsmenu.html"));
+		List<Board> boardGroups = parser.parseBbsMenu(getClass().getResourceAsStream("/bbsmenu.html"), null);
 		
 		// Verify
 		assertThat(boardGroups, notNullValue());
@@ -57,7 +57,7 @@ public class NichannelParserTest {
 		
 		// Exercise
 		try{
-			List<Board> boardGroups = parser.parseBbsMenu(inputStream);
+			List<Board> boardGroups = parser.parseBbsMenu(inputStream, null);
 			fail();
 		}catch(BbsPerseException e){
 			// BbsPerserExceptionが発生すること
@@ -74,7 +74,7 @@ public class NichannelParserTest {
 				"<BR><BR><B>地震</B>\n", "shift-jis");
 		
 		// Exercise
-		List<Board> boardGroups = parser.parseBbsMenu(inputStream);
+		List<Board> boardGroups = parser.parseBbsMenu(inputStream, null);
 		
 		// Verify
 		assertThat(boardGroups.size(), is(1));
@@ -93,7 +93,7 @@ public class NichannelParserTest {
 		
 		// Exercise
 		try{
-			List<Board> boardGroups = parser.parseBbsMenu(inputStream);
+			List<Board> boardGroups = parser.parseBbsMenu(inputStream, null);
 			fail();
 		}catch(BbsPerseException e){
 			// BbsPerserExceptionが発生すること

@@ -38,7 +38,7 @@ public class Test {
 
 		BbsConnector connector = new BbsConnector(bbs);;
 		
-		List<Board> boardGroups = parser.parseBbsMenu(connector.getBoardGroup());
+		List<Board> boardGroups = parser.parseBbsMenu(connector.getBoardGroup(), bbs);
 		if (boardGroups.size() == 0){
 			System.out.println("板一覧所得失敗");
 			return;
@@ -58,7 +58,8 @@ public class Test {
 		System.out.println("スレッド一覧取得成功");
 		
 		MessageThread messageThread = messageThreads.get(0);
-		List<Message> messages = connector.getMessageList(messageThread, board);
+		
+		List<Message> messages = parser.parseMessageList(connector.getMessageList(messageThread, board));
 		if (messages.size() == 0){
 			System.out.println("メッセージ一覧取得失敗");
 			return ;

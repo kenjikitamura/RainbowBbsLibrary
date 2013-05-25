@@ -40,7 +40,7 @@ public class BbsConnectorTest {
 	@Test
 	public void getBoardList() throws IOException, BbsPerseException{
 		downloader.inputStream = getClass().getResourceAsStream("/bbsmenu.html");
-		List<Board> boardGroups = parser.parseBbsMenu(bbsConnector.getBoardGroup());
+		List<Board> boardGroups = parser.parseBbsMenu(bbsConnector.getBoardGroup() ,bbs);
 		assertThat(boardGroups, notNullValue());
 		assertThat(boardGroups.size(), is(46));
 	}
@@ -81,7 +81,7 @@ public class BbsConnectorTest {
 		Board board = new Board();
 		board.setUrl("http://example.com/");
 		downloader.inputStream = getClass().getResourceAsStream("/9241203701.dat");
-		List<Message> messages = bbsConnector.getMessageList(messageThread, board);
+		List<Message> messages = parser.parseMessageList(bbsConnector.getMessageList(messageThread, board));
 		assertThat(messages, notNullValue());
 		assertThat(messages.size(), is(73));
 		

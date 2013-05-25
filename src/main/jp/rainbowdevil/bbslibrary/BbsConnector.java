@@ -8,7 +8,6 @@ import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.model.Bbs;
 import jp.rainbowdevil.bbslibrary.model.Board;
-import jp.rainbowdevil.bbslibrary.model.Message;
 import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.net.IDownloader;
 import jp.rainbowdevil.bbslibrary.net.WebDownloader;
@@ -46,15 +45,16 @@ public class BbsConnector {
 		return messageThreads;
 	}
 	
-	public List<Message> getMessageList(MessageThread messageThread,Board board) throws IOException, BbsPerseException{
+	public InputStream getMessageList(MessageThread messageThread,Board board) throws IOException, BbsPerseException{
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(board.getUrl()+"dat/"+messageThread.getFilename()));
-		NichannelParser parser = new NichannelParser();
-		List<Message> messages = parser.parseMessageList(inputStream);	
-		for(Message message:messages){
-			message.setParentMessageThread(messageThread);
-		}
-		return messages;
+		return inputStream;
+		//NichannelParser parser = new NichannelParser();
+		//List<Message> messages = parser.parseMessageList(inputStream);	
+		//for(Message message:messages){
+		//	message.setParentMessageThread(messageThread);
+		//}
+		//return messages;
 	}
 	
 	private void setupDownloader(){

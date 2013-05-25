@@ -5,6 +5,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +52,8 @@ public class BbsConnectorTest {
 		board.setTitle("テスト板");
 		board.setUrl("http://hoge");
 		downloader.inputStream = getClass().getResourceAsStream("/subject.txt");
-		List<MessageThread> messageThreads = bbsConnector.getMessageThreadList(board);
+		InputStream inputStream = bbsConnector.getMessageThreadList(board);
+		List<MessageThread> messageThreads = parser.parseMessageThreadList(inputStream);
 		assertThat(messageThreads, notNullValue());
 		assertThat(messageThreads.size(), is(725));
 		

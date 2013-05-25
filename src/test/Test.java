@@ -50,7 +50,7 @@ public class Test {
 		
 		System.out.println("スレッド一覧取得開始 板="+board.getTitle()+" url="+board.getUrl());
 		
-		List<MessageThread> messageThreads = connector.getMessageThreadList(board);
+		List<MessageThread> messageThreads = parser.parseMessageThreadList(connector.getMessageThreadList(board));
 		if (messageThreads.size() == 0){
 			System.out.println("スレッド一覧取得失敗");
 			return;

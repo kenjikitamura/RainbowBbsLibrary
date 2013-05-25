@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Proxy;
 import java.net.URL;
-import java.util.List;
 
 import jp.rainbowdevil.bbslibrary.model.Bbs;
 import jp.rainbowdevil.bbslibrary.model.Board;
@@ -12,7 +11,6 @@ import jp.rainbowdevil.bbslibrary.model.MessageThread;
 import jp.rainbowdevil.bbslibrary.net.IDownloader;
 import jp.rainbowdevil.bbslibrary.net.WebDownloader;
 import jp.rainbowdevil.bbslibrary.parser.BbsPerseException;
-import jp.rainbowdevil.bbslibrary.parser.NichannelParser;
 
 public class BbsConnector {
 	
@@ -34,15 +32,15 @@ public class BbsConnector {
 	}
 	
 
-	public List<MessageThread> getMessageThreadList(Board board) throws IOException, BbsPerseException{
+	public InputStream getMessageThreadList(Board board) throws IOException, BbsPerseException{
 		setupDownloader();
 		InputStream inputStream = downloader.getContents(new URL(board.getUrl()+"subject.txt"));
-		NichannelParser parser = new NichannelParser();
-		List<MessageThread> messageThreads = parser.parseMessageThreadList(inputStream);
-		for(MessageThread messageThread:messageThreads){
-			messageThread.setParentBoard(board);
-		}
-		return messageThreads;
+		//NichannelParser parser = new NichannelParser();
+		//List<MessageThread> messageThreads = parser.parseMessageThreadList(inputStream);
+		//for(MessageThread messageThread:messageThreads){
+		//	messageThread.setParentBoard(board);
+		//}
+		return inputStream;
 	}
 	
 	public InputStream getMessageList(MessageThread messageThread,Board board) throws IOException, BbsPerseException{
